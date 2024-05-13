@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, storeInterface } from '../../redux/store';
 import { authUser } from '../../redux/actions/authUser';
+import { useNavigate } from 'react-router-dom';
 
 interface FormData {
   user: string;
@@ -13,13 +14,15 @@ interface FormData {
 const UserForm: React.FC = (): JSX.Element => {
   const dispatch = useDispatch<AppDispatch>();
 
+  const navigate = useNavigate();
+
   const { User, userLoading } = useSelector(
     (state: storeInterface) => state.user
   );
 
   useEffect(() => {
-    console.log('user: ', User);
-  }, [User]);
+    User && navigate('/products');
+  }, [User, navigate]);
   const { register, handleSubmit } = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {

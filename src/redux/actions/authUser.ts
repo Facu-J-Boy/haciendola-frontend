@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { axiosInstance } from '../../config/axios';
 import { user } from '../reducers/userReducer';
+import { userId } from '../../utils/userId';
 
 export interface autResponse {
   user: user | null;
@@ -17,7 +18,7 @@ export const authUser = createAsyncThunk(
       const response = await axiosInstance.get(
         `/user/auth/${data.user}/${data.password}`
       );
-      console.log('user: ', response.data);
+      response && userId.set(response.data.user.id);
       return response.data;
     } catch (error: any) {
       console.error(error);

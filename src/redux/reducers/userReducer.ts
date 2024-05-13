@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { authUser } from '../actions/authUser';
+import { userSession } from '../actions/userSession';
 
 export interface user {
   id: string;
@@ -8,11 +9,13 @@ export interface user {
 
 export interface userState {
   User: user | null | undefined;
+  sessionLoading: boolean;
   userLoading: boolean;
 }
 
 const initialState: userState = {
   User: null,
+  sessionLoading: false,
   userLoading: false,
 };
 
@@ -38,6 +41,17 @@ const userSlice = createSlice({
       .addCase(authUser.rejected, (state, action) => {
         console.log('payload rejected: ', action);
         state.userLoading = false;
+      })
+      .addCase(userSession.pending, (state) => {
+        state.sessionLoading = true;
+      })
+      .addCase(userSession.fulfilled, (state, action) => {
+        const { user } = action.payload;
+        state.User = user;
+        state.sessionLoading = false;
+      })
+      .addCase(userSession.rejected, (state) => {
+        state.sessionLoading = false;
       });
   },
 });

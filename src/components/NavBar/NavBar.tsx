@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, storeInterface } from '../../redux/store';
 import { userId } from '../../utils/userId';
 import { logOut } from '../../redux/reducers/userReducer';
 import { useNavigate } from 'react-router-dom';
+import { userSession } from '../../redux/actions/userSession';
 
 const NavBar: React.FC = (): JSX.Element => {
   const dispatch = useDispatch<AppDispatch>();
@@ -11,9 +12,9 @@ const NavBar: React.FC = (): JSX.Element => {
 
   const { User } = useSelector((state: storeInterface) => state.user);
 
-  //   useEffect(() => {
-  //     !User && navigate('/');
-  //   }, [User, navigate]);
+  useEffect(() => {
+    dispatch(userSession());
+  }, [dispatch]);
 
   const handleLogOut = () => {
     userId.set('');

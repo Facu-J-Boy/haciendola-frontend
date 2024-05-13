@@ -4,3 +4,9 @@
   align-items: center;
   justify-content: center;
 }
+
+.container button {
+  height: 40px;
+  width: 70px;
+  text-align: center;
+}

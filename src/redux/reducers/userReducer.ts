@@ -1,13 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { authUser } from '../actions/authUser';
 
-interface user {
+export interface user {
   id: string;
   user: string;
 }
 
 export interface userState {
-  User: user | null;
+  User: user | null | undefined;
   userLoading: boolean;
 }
 
@@ -30,10 +30,13 @@ const userSlice = createSlice({
         state.userLoading = true;
       })
       .addCase(authUser.fulfilled, (state, action) => {
-        state.User = action.payload;
+        console.log('payload: ', action);
+        const { user } = action.payload;
+        state.User = user;
         state.userLoading = false;
       })
       .addCase(authUser.rejected, (state, action) => {
+        console.log('payload rejected: ', action);
         state.userLoading = false;
       });
   },

@@ -1,0 +1,29 @@
+.notification {
+  display: flex;
+  position: fixed;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-left: 10px;
+  background-color: #333;
+  color: #fff;
+  bottom: 0px;
+  right: 0px;
+  height: auto;
+  width: 400px;
+  border-radius: 10px 0px 0px 10px;
+  border: none;
+  animation: notification 200ms;
+  z-index: 999;
+}
+
+.notification p {
+  margin-left: 10px;
+  font-size: 20px;
+}
+
+@keyframes notification {
+  0% {
+    transform: translateX(40px);
+  }
+}

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './UserForm.module.css';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../redux/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, storeInterface } from '../../redux/store';
 import { authUser } from '../../redux/actions/authUser';
 
 interface FormData {
@@ -13,6 +13,13 @@ interface FormData {
 const UserForm: React.FC = (): JSX.Element => {
   const dispatch = useDispatch<AppDispatch>();
 
+  const { User, userLoading } = useSelector(
+    (state: storeInterface) => state.user
+  );
+
+  useEffect(() => {
+    console.log('user: ', User);
+  }, [User]);
   const { register, handleSubmit } = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {
@@ -59,8 +66,20 @@ const UserForm: React.FC = (): JSX.Element => {
             })}
           />
         </div>
-        <button type="submit" className="btn btn-primary">
-          Auth
+        <button
+          type="submit"
+          className="btn btn-primary"
+          disabled={userLoading}
+        >
+          {userLoading ? (
+            <div
+              style={{ width: '25px', height: '25px' }}
+              className="spinner-border text-light"
+              role="status"
+            ></div>
+          ) : (
+            'Auth'
+          )}
         </button>
       </form>
     </div>

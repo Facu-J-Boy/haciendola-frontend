@@ -19,6 +19,8 @@ const ProductItem: React.FC<Product> = ({
 }): JSX.Element => {
   const dispatch = useDispatch<AppDispatch>();
 
+  const descripcionSinComillas = description.replace(/^"|"$/g, '');
+
   const handleDelete = () => {
     dispatch(deleteProduct(id));
   };
@@ -27,7 +29,11 @@ const ProductItem: React.FC<Product> = ({
     <tr>
       <td>{handle}</td>
       <td>{title}</td>
-      <td>{description}</td>
+      <td>
+        <div
+          dangerouslySetInnerHTML={{ __html: descripcionSinComillas }}
+        ></div>
+      </td>
       <td>{SKU}</td>
       <td>{grams}</td>
       <td>{stock}</td>

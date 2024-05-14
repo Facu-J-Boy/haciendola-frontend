@@ -5,6 +5,7 @@ import NotFound from '../NotFound/NotFound';
 import { productsList } from '../../redux/actions/productsList';
 import { Product } from '../../interfaces/product';
 import ProductItem from '../ProductItem.tsx/ProductItem';
+import styles from './Product.module.css';
 
 const Products: React.FC = (): JSX.Element => {
   const dispatch = useDispatch<AppDispatch>();
@@ -13,7 +14,7 @@ const Products: React.FC = (): JSX.Element => {
     (state: storeInterface) => state.user
   );
 
-  const { products, productsLoading } = useSelector(
+  const { products, productsLoading, loadingList } = useSelector(
     (state: storeInterface) => state.products
   );
 
@@ -70,6 +71,16 @@ const Products: React.FC = (): JSX.Element => {
             </tr>
           </thead>
           <tbody>
+            {loadingList && (
+              <div className={styles.loading}>
+                <div
+                  className="spinner-grow text-light"
+                  role="status"
+                >
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            )}
             {products?.map((p: Product) => (
               <ProductItem
                 id={p.id}

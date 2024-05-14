@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Product } from '../../interfaces/product';
 import { FiEdit, FiTrash } from 'react-icons/fi';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../redux/store';
 import { deleteProduct } from '../../redux/actions/deleteProduct';
+import { Collapse, Button } from 'react-bootstrap';
 
 const ProductItem: React.FC<Product> = ({
   id,
@@ -19,6 +20,8 @@ const ProductItem: React.FC<Product> = ({
 }): JSX.Element => {
   const dispatch = useDispatch<AppDispatch>();
 
+  const [open, setOpen] = useState(false);
+
   const descripcionSinComillas = description.replace(/^"|"$/g, '');
 
   const handleDelete = () => {
@@ -30,9 +33,31 @@ const ProductItem: React.FC<Product> = ({
       <td>{handle}</td>
       <td>{title}</td>
       <td>
-        <div
-          dangerouslySetInnerHTML={{ __html: descripcionSinComillas }}
-        ></div>
+        <div style={{ width: '20vw' }}>
+          {/* Botón para abrir/cerrar el Collapse */}
+          <Button
+            type="button"
+            className="btn btn-dark"
+            onClick={() => setOpen(!open)}
+            aria-controls="descripcion-collapse"
+            aria-expanded={open}
+          >
+            {open ? 'Hide description' : 'Show description'}
+          </Button>
+
+          {/* Collapse que contiene el HTML */}
+          <Collapse in={open}>
+            <div id="descripcion-collapse">
+              {/* Utilizamos dangerouslySetInnerHTML con el HTML */}
+              <div
+                style={{ fontSize: 'small' }}
+                dangerouslySetInnerHTML={{
+                  __html: descripcionSinComillas,
+                }}
+              ></div>
+            </div>
+          </Collapse>
+        </div>
       </td>
       <td>{SKU}</td>
       <td>{grams}</td>

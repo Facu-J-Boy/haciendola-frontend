@@ -3,11 +3,12 @@ import { axiosInstance } from '../../config/axios';
 
 export const productsList = createAsyncThunk(
   'productsList',
-  async (userId) => {
+  async (userId: string) => {
     try {
       const response = await axiosInstance.get(
-        `/product/list${userId}`
+        `/product/list/${userId}`
       );
+      console.log('action: ', response);
       return response.data;
     } catch (error: any) {
       return error.response.data;

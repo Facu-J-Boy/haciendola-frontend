@@ -16,6 +16,10 @@ const NavBar: React.FC = (): JSX.Element => {
     dispatch(userSession());
   }, [dispatch]);
 
+  useEffect(() => {
+    User && navigate('/products');
+  }, [User, navigate]);
+
   const handleLogOut = () => {
     userId.set('');
     dispatch(logOut());
@@ -26,7 +30,13 @@ const NavBar: React.FC = (): JSX.Element => {
     <div>
       <nav className="navbar bg-body-tertiary">
         <div className="container-fluid">
-          <div className="navbar-brand">
+          <div
+            className="navbar-brand"
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              navigate('/');
+            }}
+          >
             <img
               src="https://getonbrd-prod.s3.amazonaws.com/uploads/users/logo/6137/logohaciendola200x200.jpg"
               alt="Logo"

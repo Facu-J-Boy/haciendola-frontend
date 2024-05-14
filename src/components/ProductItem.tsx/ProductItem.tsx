@@ -1,6 +1,9 @@
 import React from 'react';
 import { Product } from '../../interfaces/product';
 import { FiEdit, FiTrash } from 'react-icons/fi';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../redux/store';
+import { deleteProduct } from '../../redux/actions/deleteProduct';
 
 const ProductItem: React.FC<Product> = ({
   id,
@@ -14,6 +17,12 @@ const ProductItem: React.FC<Product> = ({
   comparePrice,
   barCode,
 }): JSX.Element => {
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleDelete = () => {
+    dispatch(deleteProduct(id));
+  };
+
   return (
     <tr>
       <td>{handle}</td>
@@ -29,7 +38,10 @@ const ProductItem: React.FC<Product> = ({
         <button className="mx-2 border border-transparent bg-transparent">
           <FiEdit />
         </button>
-        <button className="mx-2 border border-transparent bg-transparent">
+        <button
+          className="mx-2 border border-transparent bg-transparent"
+          onClick={handleDelete}
+        >
           <FiTrash />
         </button>
       </td>

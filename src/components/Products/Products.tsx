@@ -9,9 +9,11 @@ import ProductItem from '../ProductItem.tsx/ProductItem';
 const Products: React.FC = (): JSX.Element => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const { User } = useSelector((state: storeInterface) => state.user);
+  const { User, userLoading } = useSelector(
+    (state: storeInterface) => state.user
+  );
 
-  const { products } = useSelector(
+  const { products, productsLoading } = useSelector(
     (state: storeInterface) => state.products
   );
 
@@ -25,9 +27,9 @@ const Products: React.FC = (): JSX.Element => {
 
   return (
     <>
-      {!User ? (
+      {!User && !userLoading ? (
         <NotFound message={'401 Unauthorized'} />
-      ) : !products.length ? (
+      ) : !products.length && !productsLoading ? (
         <div
           style={{
             display: 'flex',
@@ -37,6 +39,20 @@ const Products: React.FC = (): JSX.Element => {
           }}
         >
           <h1>Empty product list</h1>
+        </div>
+      ) : productsLoading ? (
+        <div
+          style={{
+            display: 'flex',
+            height: '90vh',
+            width: '100%',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <div className="spinner-border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
         </div>
       ) : (
         <table className="table">
@@ -68,17 +84,6 @@ const Products: React.FC = (): JSX.Element => {
                 barCode={p.barCode}
               />
             ))}
-            {/* <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td colSpan={2}>Larry the Bird</td>
-              <td>@twitter</td>
-            </tr> */}
           </tbody>
         </table>
       )}

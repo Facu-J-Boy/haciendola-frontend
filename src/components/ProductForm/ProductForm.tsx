@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Form, Button, ListGroup } from 'react-bootstrap';
 import styles from './ProductForm.module.css';
 import { useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
-import { storeInterface } from '../../redux/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, storeInterface } from '../../redux/store';
 import { clearProduct } from '../../redux/reducers/singleProductReducer';
 
 interface formData {
@@ -31,11 +31,13 @@ const ProductForm: React.FC<{
 
   console.log('productState: ', product);
 
+  const dispatch = useDispatch<AppDispatch>();
+
   useEffect(() => {
     return () => {
-      clearProduct();
+      dispatch(clearProduct());
     };
-  });
+  }, [dispatch]);
 
   useEffect(() => {
     if (product) {

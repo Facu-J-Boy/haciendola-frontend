@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, storeInterface } from '../../redux/store';
 import NotFound from '../NotFound/NotFound';
@@ -6,9 +6,12 @@ import { productsList } from '../../redux/actions/productsList';
 import { Product } from '../../interfaces/product';
 import ProductItem from '../ProductItem.tsx/ProductItem';
 import styles from './Product.module.css';
+import ProductForm from '../ProductForm/ProductForm';
 
 const Products: React.FC = (): JSX.Element => {
   const dispatch = useDispatch<AppDispatch>();
+
+  const [showForm, setShowForm] = useState<boolean>(false);
 
   const { User, userLoading } = useSelector(
     (state: storeInterface) => state.user
@@ -28,6 +31,15 @@ const Products: React.FC = (): JSX.Element => {
 
   return (
     <>
+      {showForm && (
+        <>
+          <div
+            className={styles.form_container}
+            onClick={() => setShowForm(false)}
+          ></div>
+          <ProductForm type="create" />
+        </>
+      )}
       {!User && !userLoading ? (
         <NotFound message={'401 Unauthorized'} />
       ) : !products.length && !productsLoading ? (
@@ -68,6 +80,14 @@ const Products: React.FC = (): JSX.Element => {
               <th scope="col">price</th>
               <th scope="col">comparePrice</th>
               <th scope="col">barCode</th>
+              <th scope="col">
+                <button
+                  className="btn btn-dark"
+                  onClick={() => setShowForm(true)}
+                >
+                  Crear producto
+                </button>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -96,7 +116,6 @@ const Products: React.FC = (): JSX.Element => {
               />
             ))}
           </tbody>
-          {/* <ProductForm /> */}
         </table>
       )}
     </>

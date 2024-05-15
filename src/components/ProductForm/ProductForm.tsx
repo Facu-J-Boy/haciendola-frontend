@@ -87,11 +87,35 @@ const ProductForm: React.FC = (): JSX.Element => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('submit ejecutado');
+    const description = `${
+      listItems1.length
+        ? `<p><strong>Características:</strong></p>
+    <ul>
+    ${listItems1?.map((i) => `<li> ${i}</li>`)}
+    </ul>
+    <p><br></p> `
+        : ''
+    }
+    ${
+      listItems2.length
+        ? `<h5>Modo de Uso</h5>
+    <ul>
+    ${listItems2?.map((i) => `<li> ${i}</li>`)}
+    </ul>`
+        : ''
+    } 
+    ${
+      listItems3.length
+        ? `<h5>Uso Específico</h5>
+    <ul>
+    ${listItems3?.map((i) => `<li> ${i}</li>`)}
+    </ul>`
+        : ''
+    }`;
+    console.log('description: ', description.replace(/\s/g, ''));
   };
 
   return (
-    // <div className={styles.container}>
     <div className={styles.form_container}>
       <Form onSubmit={handleSubmit}>
         <h5>Crear Producto</h5>
@@ -294,7 +318,6 @@ const ProductForm: React.FC = (): JSX.Element => {
         </button>
       </Form>
     </div>
-    // </div>
   );
 };
 

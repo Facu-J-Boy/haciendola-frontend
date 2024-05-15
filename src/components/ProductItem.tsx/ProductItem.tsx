@@ -7,6 +7,7 @@ import { deleteProduct } from '../../redux/actions/deleteProduct';
 import { Collapse, Button } from 'react-bootstrap';
 import ProductForm from '../ProductForm/ProductForm';
 import styles from './ProductItem.module.css';
+import { getSingleProduct } from '../../redux/actions/getSingleProduct';
 
 const ProductItem: React.FC<Product> = ({
   id,
@@ -28,6 +29,11 @@ const ProductItem: React.FC<Product> = ({
 
   const descripcionSinComillas = description.replace(/^"|"$/g, '');
 
+  const openEditForm = () => {
+    dispatch(getSingleProduct(id));
+    setShowForm(true);
+  };
+
   const handleDelete = () => {
     dispatch(deleteProduct(id));
   };
@@ -40,7 +46,7 @@ const ProductItem: React.FC<Product> = ({
             className={styles.form_container}
             onClick={() => setShowForm(false)}
           ></div>
-          <ProductForm />
+          <ProductForm type="edit" />
         </>
       )}
       <tr>
@@ -82,7 +88,7 @@ const ProductItem: React.FC<Product> = ({
         <td>
           <button
             className="mx-2 border border-transparent bg-transparent"
-            onClick={() => setShowForm(true)}
+            onClick={openEditForm}
           >
             <FiEdit />
           </button>

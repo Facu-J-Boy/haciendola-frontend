@@ -1,13 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Button, ListGroup } from 'react-bootstrap';
 import styles from './ProductForm.module.css';
+import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
+import { storeInterface } from '../../redux/store';
+import { clearProduct } from '../../redux/reducers/singleProductReducer';
 
-const ProductForm: React.FC = (): JSX.Element => {
-  const [title, setTitle] = useState('');
-  const [grams, setGrams] = useState('');
-  const [stock, setStock] = useState('');
-  const [price, setPrice] = useState('');
-  const [comparePrice, setComparePrice] = useState('');
+interface formData {
+  title: string;
+  grams: number;
+  stock: number;
+  price: number;
+  comparePrice: number;
+}
+
+const ProductForm: React.FC<{
+  type: 'edit' | 'create';
+}> = (type): JSX.Element => {
+  const { register, handleSubmit, setValue } = useForm<formData>();
   const [item1, setItem1] = useState('');
   const [listItems1, setListItems1] = useState<string[]>([]);
   const [item2, setItem2] = useState('');
@@ -15,14 +25,70 @@ const ProductForm: React.FC = (): JSX.Element => {
   const [item3, setItem3] = useState('');
   const [listItems3, setListItems3] = useState<string[]>([]);
 
+  const { product } = useSelector(
+    (state: storeInterface) => state.product
+  );
+
+  console.log('productState: ', product);
+
+  useEffect(() => {
+    return () => {
+      clearProduct();
+    };
+  });
+
+  useEffect(() => {
+    if (product) {
+      const characteristicsMatch = product.description.match(
+        /<strong>Características:<\/strong><\/p>(.*?)<\/ul>/s
+      );
+      if (characteristicsMatch) {
+        const items =
+          characteristicsMatch[1].match(/<li>(.*?)<\/li>/gs);
+        if (items) {
+          const cleanedItems = items.map((item) =>
+            item.replace(/<\/?li>/g, '').trim()
+          );
+          setListItems1(cleanedItems);
+        }
+      }
+
+      const groups = product.description.match(
+        /<h5>.*?<\/h5>(<ul>.*?<\/ul>)+/gs
+      );
+      if (groups) {
+        groups.forEach((group) => {
+          const items = group.match(/<li>(.*?)<\/li>/gs);
+          if (items) {
+            const cleanedItems = items.map((item) =>
+              item.replace(/<\/?li>/g, '').trim()
+            );
+            if (group.includes('Modo de Uso')) {
+              setListItems2(cleanedItems);
+            } else if (group.includes('Uso Específico')) {
+              setListItems3(cleanedItems);
+            }
+          }
+        });
+      }
+    }
+  }, [product]);
+
+  useEffect(() => {
+    if (product) {
+      setValue('title', product.title);
+      setValue('grams', product.grams);
+      setValue('stock', product.stock);
+      setValue('price', product.price);
+      setValue('comparePrice', product.comparePrice);
+    }
+  }, [product, type, setValue]);
+
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const { name, value } = event.target;
     switch (name) {
-      case 'title':
-        setTitle(value);
-        break;
       case 'item1':
         setItem1(value);
         break;
@@ -31,18 +97,6 @@ const ProductForm: React.FC = (): JSX.Element => {
         break;
       case 'item3':
         setItem3(value);
-        break;
-      case 'grams':
-        setGrams(value);
-        break;
-      case 'stock':
-        setStock(value);
-        break;
-      case 'price':
-        setPrice(value);
-        break;
-      case 'comparePrice':
-        setComparePrice(value);
         break;
       default:
         break;
@@ -85,8 +139,9 @@ const ProductForm: React.FC = (): JSX.Element => {
     }
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const submit = async (data: formData): Promise<void> => {
+    console.log('data: ', data);
+    // event.preventDefault();
     const description = `${
       listItems1.length
         ? `<p><strong>Características:</strong></p>
@@ -117,7 +172,7 @@ const ProductForm: React.FC = (): JSX.Element => {
 
   return (
     <div className={styles.form_container}>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit(submit)}>
         <h5>Crear Producto</h5>
         <div className="mb-3">
           <label htmlFor="title" className="form-label">
@@ -127,9 +182,12 @@ const ProductForm: React.FC = (): JSX.Element => {
             type="text"
             className="form-control"
             id="title"
-            name="title"
-            value={title}
-            onChange={handleChange}
+            {...register('title', {
+              required: {
+                value: true,
+                message: 'Title is required',
+              },
+            })}
           />
         </div>
         <div>
@@ -156,13 +214,7 @@ const ProductForm: React.FC = (): JSX.Element => {
             {listItems1.map((item, index) => (
               <ListGroup.Item
                 key={index}
-                style={{
-                  display: 'inline',
-                  overflowWrap: 'break-word',
-                  width: '50vw',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
+                className={styles.list_item}
               >
                 <p>{item}</p>
                 <Button
@@ -199,13 +251,7 @@ const ProductForm: React.FC = (): JSX.Element => {
             {listItems2.map((item, index) => (
               <ListGroup.Item
                 key={index}
-                style={{
-                  display: 'inline',
-                  overflowWrap: 'break-word',
-                  width: '50vw',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
+                className={styles.list_item}
               >
                 <p>{item}</p>
                 <Button
@@ -242,13 +288,7 @@ const ProductForm: React.FC = (): JSX.Element => {
             {listItems3.map((item, index) => (
               <ListGroup.Item
                 key={index}
-                style={{
-                  display: 'inline',
-                  overflowWrap: 'break-word',
-                  width: '50vw',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
+                className={styles.list_item}
               >
                 <p>{item}</p>
                 <Button
@@ -269,9 +309,12 @@ const ProductForm: React.FC = (): JSX.Element => {
             type="text"
             className="form-control"
             id="grams"
-            name="grams"
-            value={grams}
-            onChange={handleChange}
+            {...register('grams', {
+              required: {
+                value: true,
+                message: 'Grams is required',
+              },
+            })}
           />
         </div>
         <div className="mb-3">
@@ -282,9 +325,12 @@ const ProductForm: React.FC = (): JSX.Element => {
             type="text"
             className="form-control"
             id="stock"
-            name="stock"
-            value={stock}
-            onChange={handleChange}
+            {...register('stock', {
+              required: {
+                value: true,
+                message: 'Stock is required',
+              },
+            })}
           />
         </div>
         <div className="mb-3">
@@ -295,9 +341,17 @@ const ProductForm: React.FC = (): JSX.Element => {
             type="text"
             className="form-control"
             id="price"
-            name="price"
-            value={price}
-            onChange={handleChange}
+            placeholder="0.00"
+            {...register('price', {
+              required: {
+                value: true,
+                message: 'Price is required',
+              },
+              pattern: {
+                value: /^\d*\.?\d*$/,
+                message: 'Enter a valid numerical value',
+              },
+            })}
           />
         </div>
         <div className="mb-3">
@@ -308,9 +362,16 @@ const ProductForm: React.FC = (): JSX.Element => {
             type="text"
             className="form-control"
             id="comparePrice"
-            name="comparePrice"
-            value={comparePrice}
-            onChange={handleChange}
+            {...register('comparePrice', {
+              required: {
+                value: true,
+                message: 'Compare Price is required',
+              },
+              pattern: {
+                value: /^\d*\.?\d*$/,
+                message: 'Enter a valid numerical value',
+              },
+            })}
           />
         </div>
         <button type="submit" className="btn btn-primary">

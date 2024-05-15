@@ -26,3 +26,11 @@
 .form_container::-webkit-scrollbar-track {
   background-color: #f1f1f1; /* color del fondo de la barra de desplazamiento */
 }
+
+.list_item {
+  display: inline;
+  overflow-wrap: break-word;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}

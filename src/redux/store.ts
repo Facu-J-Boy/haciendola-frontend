@@ -6,9 +6,13 @@ import notificationReducer, {
 import productsReducer, {
   productsState,
 } from './reducers/productsReducer';
+import singleProductReducer, {
+  singleProductState,
+} from './reducers/singleProductReducer';
 
 export interface storeInterface {
   user: userState;
+  product: singleProductState;
   products: productsState;
   notification: notificationState;
 }
@@ -16,6 +20,7 @@ export interface storeInterface {
 const store = configureStore({
   reducer: {
     user: userReducer,
+    product: singleProductReducer,
     products: productsReducer,
     notification: notificationReducer,
   },

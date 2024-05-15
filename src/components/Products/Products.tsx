@@ -6,7 +6,6 @@ import { productsList } from '../../redux/actions/productsList';
 import { Product } from '../../interfaces/product';
 import ProductItem from '../ProductItem.tsx/ProductItem';
 import styles from './Product.module.css';
-import ProductForm from '../ProductForm/ProductForm';
 
 const Products: React.FC = (): JSX.Element => {
   const dispatch = useDispatch<AppDispatch>();
@@ -29,7 +28,6 @@ const Products: React.FC = (): JSX.Element => {
 
   return (
     <>
-      <ProductForm />
       {!User && !userLoading ? (
         <NotFound message={'401 Unauthorized'} />
       ) : !products.length && !productsLoading ? (

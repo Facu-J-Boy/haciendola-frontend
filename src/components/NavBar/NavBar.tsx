@@ -16,10 +16,6 @@ const NavBar: React.FC = (): JSX.Element => {
     dispatch(userSession());
   }, [dispatch]);
 
-  useEffect(() => {
-    User && navigate('/products');
-  }, [User, navigate]);
-
   const handleLogOut = () => {
     userId.set('');
     dispatch(logOut());

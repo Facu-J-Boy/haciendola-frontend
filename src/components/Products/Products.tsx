@@ -42,7 +42,7 @@ const Products: React.FC = (): JSX.Element => {
       )}
       {!User && !userLoading ? (
         <NotFound message={'401 Unauthorized'} />
-      ) : !products.length && !productsLoading ? (
+      ) : !products && !productsLoading ? (
         <div
           style={{
             display: 'flex',
@@ -85,7 +85,7 @@ const Products: React.FC = (): JSX.Element => {
                   className="btn btn-dark"
                   onClick={() => setShowForm(true)}
                 >
-                  Crear producto
+                  Crear
                 </button>
               </th>
             </tr>

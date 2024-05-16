@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { productsList } from '../actions/productsList';
 import { Product } from '../../interfaces/product';
 import { deleteProduct } from '../actions/deleteProduct';
+import { createProduct } from '../actions/createProduct';
 
 export interface productsState {
   products: Product[] | [];
@@ -29,6 +30,17 @@ const productsSlice = createSlice({
         state.productsLoading = false;
       })
       .addCase(productsList.rejected, (state) => {
+        state.productsLoading = false;
+      })
+      .addCase(createProduct.pending, (state) => {
+        state.productsLoading = true;
+      })
+      .addCase(createProduct.fulfilled, (state, action) => {
+        const { product } = action.payload;
+        state.products = product && [product, ...state.products];
+        state.productsLoading = false;
+      })
+      .addCase(createProduct.rejected, (state) => {
         state.productsLoading = false;
       })
       .addCase(deleteProduct.pending, (state) => {

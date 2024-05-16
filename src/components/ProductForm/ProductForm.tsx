@@ -5,6 +5,9 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, storeInterface } from '../../redux/store';
 import { clearProduct } from '../../redux/reducers/singleProductReducer';
+import { createProduct } from '../../redux/actions/createProduct';
+import { userId } from '../../utils/userId';
+import { Product } from '../../interfaces/product';
 
 interface formData {
   title: string;
@@ -16,7 +19,7 @@ interface formData {
 
 const ProductForm: React.FC<{
   type: 'edit' | 'create';
-}> = (type): JSX.Element => {
+}> = ({ type }): JSX.Element => {
   const { register, handleSubmit, setValue } = useForm<formData>();
   const [item1, setItem1] = useState('');
   const [listItems1, setListItems1] = useState<string[]>([]);
@@ -143,7 +146,6 @@ const ProductForm: React.FC<{
 
   const submit = async (data: formData): Promise<void> => {
     console.log('data: ', data);
-    // event.preventDefault();
     const description = `${
       listItems1.length
         ? `<p><strong>Características:</strong></p>
@@ -170,6 +172,19 @@ const ProductForm: React.FC<{
         : ''
     }`;
     console.log('description: ', description.replace(/\s/g, ''));
+    const productData: Product = {
+      title: data.title,
+      description: description.replace(/\s/g, ''),
+      grams: data.grams,
+      stock: data.stock,
+      price: data.price,
+      comparePrice: data.comparePrice,
+    };
+    type === 'create'
+      ? dispatch(
+          createProduct({ userId: userId.get(), data: productData })
+        )
+      : type === 'edit' && console.log('edit');
   };
 
   return (

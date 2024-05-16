@@ -3,6 +3,7 @@ import { productsList } from '../actions/productsList';
 import { Product } from '../../interfaces/product';
 import { deleteProduct } from '../actions/deleteProduct';
 import { createProduct } from '../actions/createProduct';
+import { editProduct } from '../actions/editProduct';
 
 export interface productsState {
   products: Product[] | [];
@@ -33,16 +34,32 @@ const productsSlice = createSlice({
         state.productsLoading = false;
       })
       .addCase(createProduct.pending, (state) => {
-        state.productsLoading = true;
+        state.loadingList = true;
       })
       .addCase(createProduct.fulfilled, (state, action) => {
         const { product } = action.payload;
         state.products = product &&
           state.products && [product, ...state.products];
-        state.productsLoading = false;
+        state.loadingList = false;
       })
       .addCase(createProduct.rejected, (state) => {
-        state.productsLoading = false;
+        state.loadingList = false;
+      })
+      .addCase(editProduct.pending, (state) => {
+        state.loadingList = true;
+      })
+      .addCase(editProduct.fulfilled, (state, action) => {
+        const { product } = action.payload;
+        if (product) {
+          const indice = state.products.findIndex(
+            (producto) => producto.id === product.id
+          );
+          indice !== -1 && state.products.splice(indice, 1, product);
+        }
+        state.loadingList = false;
+      })
+      .addCase(editProduct.rejected, (state) => {
+        state.loadingList = false;
       })
       .addCase(deleteProduct.pending, (state) => {
         state.loadingList = true;

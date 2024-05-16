@@ -18,6 +18,9 @@
 }
 
 .notification p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-left: 10px;
   font-size: 20px;
 }

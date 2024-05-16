@@ -34,7 +34,7 @@ const UserForm: React.FC = (): JSX.Element => {
   return (
     <div className={styles.container}>
       <form
-        className="shadow p-3 mb-5 bg-body-tertiary rounded w-40"
+        // className="p-3 mb-5 bg-body-tertiary rounded w-40"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="mb-3">

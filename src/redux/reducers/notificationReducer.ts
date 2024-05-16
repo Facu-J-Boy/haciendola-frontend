@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { authUser } from '../actions/authUser';
 import { deleteProduct } from '../actions/deleteProduct';
 import { createProduct } from '../actions/createProduct';
+import { editProduct } from '../actions/editProduct';
 
 export interface notificationState {
   message: string | null;
@@ -29,6 +30,9 @@ const notificationSlice = createSlice({
         state.message = action.payload.msg;
       })
       .addCase(createProduct.fulfilled, (state, action) => {
+        state.message = action.payload.msg;
+      })
+      .addCase(editProduct.fulfilled, (state, action) => {
         state.message = action.payload.msg;
       });
   },

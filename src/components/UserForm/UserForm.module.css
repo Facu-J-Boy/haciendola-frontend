@@ -10,3 +10,8 @@
   width: 70px;
   text-align: center;
 }
+
+.errors {
+  color: red;
+  font-size: medium;
+}

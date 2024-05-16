@@ -24,7 +24,11 @@ const UserForm: React.FC = (): JSX.Element => {
     User && navigate('/products');
   }, [User, navigate]);
 
-  const { register, handleSubmit } = useForm<FormData>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {
     const { user, password } = data;
@@ -37,9 +41,10 @@ const UserForm: React.FC = (): JSX.Element => {
         // className="p-3 mb-5 bg-body-tertiary rounded w-40"
         onSubmit={handleSubmit(onSubmit)}
       >
+        <h5>Autenticar usuario</h5>
         <div className="mb-3">
           <label htmlFor="exampleInputEmail1" className="form-label">
-            User
+            Usuario
           </label>
           <input
             type="text"
@@ -47,16 +52,30 @@ const UserForm: React.FC = (): JSX.Element => {
             id="exampleInputEmail1"
             aria-describedby="emailHelp"
             {...register('user', {
-              required: { value: true, message: 'User is required' }, // Si no hay nada escrito en el input de user se coloca un mensaje
+              required: {
+                value: true,
+                message: 'Este campo es requerido',
+              }, // Si no hay nada escrito en el input de user se coloca un mensaje
+              // minLength: {
+              //   value: 8,
+              //   message: 'Se requiere al menos 8 caracteres',
+              // },
             })}
           />
+          {errors.user ? (
+            <span className={styles.errors}>
+              {errors.user.message}
+            </span>
+          ) : (
+            <br />
+          )}
         </div>
         <div className="mb-3">
           <label
             htmlFor="exampleInputPassword1"
             className="form-label"
           >
-            Password
+            Contraseña
           </label>
           <input
             type="password"
@@ -65,10 +84,21 @@ const UserForm: React.FC = (): JSX.Element => {
             {...register('password', {
               required: {
                 value: true,
-                message: 'Password is required',
+                message: 'Este campo es requerido',
               }, // Si no hay nada escrito en el input de password se coloca un mensaje
+              minLength: {
+                value: 8,
+                message: 'Se requiere al menos 8 caracteres',
+              },
             })}
           />
+          {errors.password ? (
+            <span className={styles.errors}>
+              {errors.password.message}
+            </span>
+          ) : (
+            <br />
+          )}
         </div>
         <button
           type="submit"

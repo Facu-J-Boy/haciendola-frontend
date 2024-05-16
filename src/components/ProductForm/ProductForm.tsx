@@ -45,7 +45,16 @@ const ProductForm: React.FC<{
 
   useEffect(() => {
     if (product) {
+      const removeHTMLTags = (html: string) => {
+        const div = document.createElement('div');
+        div.innerHTML = html;
+        return div.textContent || div.innerText || '';
+      };
+      const plainTextDescription = removeHTMLTags(
+        product.description
+      );
       setValue('title', product.title);
+      setValue('description', plainTextDescription);
       setValue('grams', product.grams);
       setValue('stock', product.stock);
       setValue('price', product.price);
@@ -187,10 +196,14 @@ const ProductForm: React.FC<{
                 <br />
               )}
             </div>
-            <div className="form-floating">
+            <div className="mb-3">
+              <label htmlFor="floatingTextarea2">Descripcion:</label>
               <textarea
-                style={{ height: '30vh', resize: 'none' }}
-                className="form-control"
+                style={{
+                  height: '30vh',
+                  width: '100%',
+                  resize: 'none',
+                }}
                 placeholder="Leave a comment here"
                 id="floatingTextarea2"
                 {...register('description', {
@@ -200,7 +213,6 @@ const ProductForm: React.FC<{
                   },
                 })}
               ></textarea>
-              <label htmlFor="floatingTextarea2">Description:</label>
             </div>
             {errors.description ? (
               <span className={styles.errors}>

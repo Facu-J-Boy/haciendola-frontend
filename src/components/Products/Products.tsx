@@ -7,6 +7,7 @@ import { Product } from '../../interfaces/product';
 import ProductItem from '../ProductItem.tsx/ProductItem';
 import styles from './Product.module.css';
 import ProductForm from '../ProductForm/ProductForm';
+import { clearProductList } from '../../redux/reducers/productsReducer';
 
 const Products: React.FC = (): JSX.Element => {
   const dispatch = useDispatch<AppDispatch>();
@@ -24,6 +25,12 @@ const Products: React.FC = (): JSX.Element => {
   useEffect(() => {
     User && dispatch(productsList(User.id));
   }, [User, dispatch]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearProductList());
+    };
+  }, [dispatch]);
 
   useEffect(() => {
     console.log('Products: ', products);
@@ -103,6 +110,7 @@ const Products: React.FC = (): JSX.Element => {
             )}
             {products?.map((p: Product) => (
               <ProductItem
+                key={p.id}
                 id={p.id}
                 handle={p.handle}
                 title={p.title}

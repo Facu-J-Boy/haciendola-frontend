@@ -62,7 +62,7 @@ const ProductItem: React.FC<Product> = ({
               aria-controls="descripcion-collapse"
               aria-expanded={open}
             >
-              {open ? 'Hide description' : 'Show description'}
+              {open ? 'ocultar' : 'Descripción'}
             </Button>
 
             {/* Collapse que contiene el HTML */}

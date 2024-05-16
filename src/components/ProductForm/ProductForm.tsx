@@ -44,7 +44,10 @@ const ProductForm: React.FC<{
 
   useEffect(() => {
     if (product) {
-      const characteristicsMatch = product.description.match(
+      const description = product.description;
+
+      // Extraer la sección de Características
+      const characteristicsMatch = description.match(
         /<strong>Características:<\/strong><\/p>(.*?)<\/ul>/s
       );
       if (characteristicsMatch) {
@@ -58,23 +61,32 @@ const ProductForm: React.FC<{
         }
       }
 
-      const groups = product.description.match(
-        /<h5>.*?<\/h5>(<ul>.*?<\/ul>)+/gs
+      // Extraer la sección de Modo de Uso
+      const modeOfUseMatch = description.match(
+        /<h5>Modo de Uso<\/h5>(.*?)<\/ul>/s
       );
-      if (groups) {
-        groups.forEach((group) => {
-          const items = group.match(/<li>(.*?)<\/li>/gs);
-          if (items) {
-            const cleanedItems = items.map((item) =>
-              item.replace(/<\/?li>/g, '').trim()
-            );
-            if (group.includes('Modo de Uso')) {
-              setListItems2(cleanedItems);
-            } else if (group.includes('Uso Específico')) {
-              setListItems3(cleanedItems);
-            }
-          }
-        });
+      if (modeOfUseMatch) {
+        const items = modeOfUseMatch[1].match(/<li>(.*?)<\/li>/gs);
+        if (items) {
+          const cleanedItems = items.map((item) =>
+            item.replace(/<\/?li>/g, '').trim()
+          );
+          setListItems2(cleanedItems);
+        }
+      }
+
+      // Extraer la sección de Uso Específico
+      const specificUseMatch = description.match(
+        /<h5>Uso Específico<\/h5>(.*?)<\/ul>/s
+      );
+      if (specificUseMatch) {
+        const items = specificUseMatch[1].match(/<li>(.*?)<\/li>/gs);
+        if (items) {
+          const cleanedItems = items.map((item) =>
+            item.replace(/<\/?li>/g, '').trim()
+          );
+          setListItems3(cleanedItems);
+        }
       }
     }
   }, [product]);
@@ -150,7 +162,7 @@ const ProductForm: React.FC<{
       listItems1.length
         ? `<p><strong>Características:</strong></p>
     <ul>
-    ${listItems1?.map((i) => `<li> ${i}</li>`)}
+    ${listItems1?.map((i) => `<li>${i}</li>`).join('')}
     </ul>
     <p><br></p> `
         : ''
@@ -159,7 +171,7 @@ const ProductForm: React.FC<{
       listItems2.length
         ? `<h5>Modo de Uso</h5>
     <ul>
-    ${listItems2?.map((i) => `<li> ${i}</li>`)}
+    ${listItems2?.map((i) => `<li>${i}</li>`).join('')}
     </ul>`
         : ''
     } 
@@ -167,14 +179,14 @@ const ProductForm: React.FC<{
       listItems3.length
         ? `<h5>Uso Específico</h5>
     <ul>
-    ${listItems3?.map((i) => `<li> ${i}</li>`)}
+    ${listItems3?.map((i) => `<li>${i}</li>`).join('')}
     </ul>`
         : ''
     }`;
     console.log('description: ', description.replace(/\s/g, ''));
     const productData: Product = {
       title: data.title,
-      description: description.replace(/\s/g, ''),
+      description,
       grams: data.grams,
       stock: data.stock,
       price: data.price,

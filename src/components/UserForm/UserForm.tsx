@@ -21,7 +21,7 @@ const UserForm: React.FC = (): JSX.Element => {
   );
 
   useEffect(() => {
-    !User && navigate('/products');
+    User && navigate('/products');
   }, [User, navigate]);
 
   const { register, handleSubmit } = useForm<FormData>();

@@ -42,7 +42,7 @@ const Products: React.FC = (): JSX.Element => {
       )}
       {!User && !userLoading ? (
         <NotFound message={'401 Unauthorized'} />
-      ) : !products && !productsLoading ? (
+      ) : !products.length && !productsLoading ? (
         <div
           style={{
             display: 'flex',

@@ -17,7 +17,6 @@ const notificationSlice = createSlice({
   initialState,
   reducers: {
     clearNotification: (state) => {
-      console.log('clearNotification ejecutado');
       state.message = null;
     },
   },

@@ -32,10 +32,6 @@ const Products: React.FC = (): JSX.Element => {
     };
   }, [dispatch]);
 
-  useEffect(() => {
-    console.log('Products: ', products);
-  });
-
   return (
     <>
       {showForm && (

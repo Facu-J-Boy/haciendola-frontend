@@ -8,7 +8,6 @@ export const productsList = createAsyncThunk(
       const response = await axiosInstance.get(
         `/product/list/${userId}`
       );
-      console.log('action: ', response);
       return response.data;
     } catch (error: any) {
       return error.response.data;

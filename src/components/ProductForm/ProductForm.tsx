@@ -37,8 +37,6 @@ const ProductForm: React.FC<{
     (state: storeInterface) => state.products
   );
 
-  console.log('productState: ', product);
-
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -67,8 +65,6 @@ const ProductForm: React.FC<{
   }, [product, type, setValue]);
 
   const submit = async (data: formData): Promise<void> => {
-    console.log('data: ', data);
-
     const description = () => {
       const lineas: string[] = data.description.split('\n');
       let listaActiva: boolean = false;
@@ -134,10 +130,7 @@ const ProductForm: React.FC<{
       return htmlString;
     };
 
-    console.log('formato de description: ', description());
-
     const newDescription = description();
-    console.log('description: ', newDescription.replace(/\s/g, ''));
     const productData: Product = {
       title: data.title,
       description: newDescription,

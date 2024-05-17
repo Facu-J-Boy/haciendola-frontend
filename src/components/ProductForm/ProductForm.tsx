@@ -33,6 +33,10 @@ const ProductForm: React.FC<{
     (state: storeInterface) => state.product
   );
 
+  const { loadingList } = useSelector(
+    (state: storeInterface) => state.products
+  );
+
   console.log('productState: ', product);
 
   const dispatch = useDispatch<AppDispatch>();
@@ -204,7 +208,6 @@ const ProductForm: React.FC<{
                   width: '100%',
                   resize: 'none',
                 }}
-                placeholder="Leave a comment here"
                 id="floatingTextarea2"
                 {...register('description', {
                   required: {
@@ -233,6 +236,10 @@ const ProductForm: React.FC<{
                   required: {
                     value: true,
                     message: 'Grams is required',
+                  },
+                  pattern: {
+                    value: /^\d+$/,
+                    message: 'Solo numero entero',
                   },
                 })}
               />
@@ -326,10 +333,22 @@ const ProductForm: React.FC<{
                 <br />
               )}
             </div>
-            <button type="submit" className="btn btn-primary">
-              {type === 'edit'
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={loadingList}
+            >
+              {type === 'edit' && !loadingList
                 ? 'Editar'
-                : type === 'create' && 'Crear'}
+                : type === 'create' && !loadingList
+                ? 'Crear'
+                : loadingList && (
+                    <div
+                      style={{ width: '25px', height: '25px' }}
+                      className="spinner-border text-light"
+                      role="status"
+                    ></div>
+                  )}
             </button>
           </form>
         </div>

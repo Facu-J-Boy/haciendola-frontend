@@ -80,7 +80,7 @@ const ProductItem: React.FC<Product> = ({
           </div>
         </td>
         <td>{SKU}</td>
-        <td>{grams}</td>
+        <td>{`${grams}.0`}</td>
         <td>{stock}</td>
         <td>{price}</td>
         <td>{comparePrice}</td>

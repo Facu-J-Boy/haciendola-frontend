@@ -106,7 +106,6 @@ const Products: React.FC = (): JSX.Element => {
             )}
             {products?.map((p: Product) => (
               <ProductItem
-                key={p.id}
                 id={p.id}
                 handle={p.handle}
                 title={p.title}
